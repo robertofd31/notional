@@ -63,8 +63,13 @@ if response.status_code == 200:
     # Filter by chain
     st.sidebar.header('Filters')
     chains = df['chain'].unique()
-    selected_chain = st.sidebar.selectbox('Select Chain', chains)
-    filtered_df = df[df['chain'] == selected_chain] if selected_chain else df
+    all_chains_option = ["Select All"] + list(chains)
+    selected_chains = st.sidebar.multiselect('Select Chain(s)', options=all_chains_option, default=["Select All"])
+
+    if "Select All" in selected_chains:
+        filtered_df = df.copy()
+    else:
+        filtered_df = df[df['chain'].isin(selected_chains)]
 
     # Filter by TVL
     min_tvl, max_tvl = df['tvl'].min(), df['tvl'].max()
@@ -78,8 +83,13 @@ if response.status_code == 200:
 
     # Filter by pool_meta
     pool_meta_options = df['pool_meta'].dropna().unique()
-    selected_pool_meta = st.sidebar.selectbox('Select Pool Meta', pool_meta_options)
-    filtered_df = filtered_df[filtered_df['pool_meta'] == selected_pool_meta] if selected_pool_meta else filtered_df
+    all_pool_meta_option = ["Select All"] + list(pool_meta_options)
+    selected_pool_meta = st.sidebar.selectbox('Select Pool Meta', options=all_pool_meta_option)
+
+    if selected_pool_meta == "Select All":
+        filtered_df = filtered_df.copy()
+    else:
+        filtered_df = filtered_df[filtered_df['pool_meta'] == selected_pool_meta]
 
     if not filtered_df.empty:
         # Display results in a table
