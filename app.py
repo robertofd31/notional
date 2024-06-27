@@ -78,7 +78,7 @@ if response.status_code == 200:
 
         # Gráfico de barras según cada fila y APY
         st.subheader('Gráfico de Barras: APY por Pool ID')
-        bars = alt.Chart(filtered_df).mark_bar().encode(
+        bars = alt.Chart(filtered_df).mark_bar(color='#33f8fe').encode(
             x='pool',
             y='apy',
             color='chain',
