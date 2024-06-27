@@ -48,7 +48,8 @@ if response.status_code == 200:
     df = df.sort_values(by='apy', ascending=False)
 
     # Mostrar los resultados en la aplicación Streamlit
-    st.title('Resultados de la API de Yields para el proyecto "notional-v3"')
+    st.title('Notional Finance Yields')
+    st.image('https://pbs.twimg.com/profile_images/1327058875627970561/zk8nf4kv_400x400.jpg', use_column_width=True)
 
     # Filtrar por cadena (chain)
     st.sidebar.header('Filtros')
@@ -77,10 +78,10 @@ if response.status_code == 200:
         st.dataframe(filtered_df)
 
         # Gráfico de barras según cada fila y APY
-        st.subheader('Gráfico de Barras: APY por Pool ID')
+        st.subheader('Gráfico de Barras: APY por Nombre del Proyecto')
         bars = alt.Chart(filtered_df).mark_bar().encode(
-            x='pool',
-            y='apy',
+            x=alt.X('name', title='Nombre del Proyecto'),
+            y=alt.Y('apy', title='APY'),
             color='chain',
             tooltip=['name', 'symbol', 'apy']
         ).properties(
