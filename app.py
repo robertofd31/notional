@@ -3,16 +3,22 @@ import requests
 import pandas as pd
 import altair as alt
 
+@st.cache
+def fetch_data(url):
+    response = requests.get(url, headers={'accept': '*/*'})
+    if response.status_code == 200:
+        return response.json()['data']
+    else:
+        st.error("Failed to fetch data from API")
+        return None
+
 # Define the API URL
 url = 'https://yields.llama.fi/pools'
 
-# Make a GET request to the API
-response = requests.get(url, headers={'accept': '*/*'})
+# Fetch data from API
+data = fetch_data(url)
 
-# Check if the request was successful
-if response.status_code == 200:
-    data = response.json()['data']
-
+if data:
     # Filter results by the project "notional-v3"
     filtered_data = [pool for pool in data if pool['project'] == 'notional-v3']
 
