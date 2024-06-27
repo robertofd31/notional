@@ -54,7 +54,7 @@ if response.status_code == 200:
         f"""
         <div style="display: flex; align-items: center;">
             <img src="{image_url}" style="height: 100px; width: 100px; margin-right: 10px;">
-            <h1 style="margin-bottom: 0;">Notional V3 Yields"</h1>
+            <h1 style="margin-bottom: 0;">Notional V3 Yields</h1>
         </div>
         """,
         unsafe_allow_html=True
