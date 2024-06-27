@@ -75,9 +75,9 @@ if response.status_code == 200:
         # Gráfico de barras según cada fila y APY
         st.subheader('Gráfico de Barras: APY por Fila')
         bars = alt.Chart(filtered_df).mark_bar().encode(
-            x='index',
+            x='name',
             y='apy',
-            color='index',
+            color='chain',
             tooltip=['name', 'symbol', 'apy']
         ).properties(
             width=600
