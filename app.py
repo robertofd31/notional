@@ -72,6 +72,10 @@ if response.status_code == 200:
     filtered_df = filtered_df[filtered_df['pool_meta'] == selected_pool_meta] if selected_pool_meta else filtered_df
 
     if not filtered_df.empty:
+        # Mostrar los resultados en la tabla
+        st.subheader('Resultados Filtrados')
+        st.dataframe(filtered_df)
+
         # Gráfico de barras según cada fila y APY
         st.subheader('Gráfico de Barras: APY por Fila')
         bars = alt.Chart(filtered_df).mark_bar().encode(
@@ -80,14 +84,11 @@ if response.status_code == 200:
             color='chain',
             tooltip=['name', 'symbol', 'apy']
         ).properties(
-            width=600
+            width=alt.Step(80)  # Ancho fijo para cada barra
         ).interactive()
 
         st.altair_chart(bars, use_container_width=True)
 
-        # Mostrar los resultados en la tabla
-        st.subheader('Resultados Filtrados')
-        st.dataframe(filtered_df)
     else:
         st.write('No hay datos que mostrar con los filtros seleccionados.')
 
