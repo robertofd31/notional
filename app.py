@@ -14,7 +14,7 @@ if response.status_code == 200:
     data = response.json()['data']
 
     # Filtrar los resultados por el proyecto "notional"
-    filtered_data = [pool for pool in data if pool['project'] == 'notional']
+    filtered_data = [pool for pool in data if pool['project'] == 'notional-v3']
 
     # Convertir los datos filtrados en un DataFrame de pandas
     df = pd.DataFrame(filtered_data)
