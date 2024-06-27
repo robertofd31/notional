@@ -47,8 +47,13 @@ if response.status_code == 200:
     # Sort by descending APY
     df = df.sort_values(by='apy', ascending=False)
 
-    # Display results in the Streamlit app
-    st.title('Yields API Results for project "notional-v3"')
+    # URL de la imagen
+    image_url = "https://pbs.twimg.com/profile_images/1327058875627970561/zk8nf4kv_400x400.jpg"
+    
+    # Título con imagen al lado
+    st.title('Yields of Notional V3')
+    st.markdown(f'<img src="{image_url}" style="float: left; margin-right: 10px; height: 50px; width: 50px;">', unsafe_allow_html=True)
+    
 
     # Filter by chain
     st.sidebar.header('Filters')
