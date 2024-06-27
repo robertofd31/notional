@@ -77,14 +77,14 @@ if response.status_code == 200:
         st.dataframe(filtered_df)
 
         # Gráfico de barras según cada fila y APY
-        st.subheader('Gráfico de Barras: APY por Fila')
+        st.subheader('Gráfico de Barras: APY por Pool ID')
         bars = alt.Chart(filtered_df).mark_bar().encode(
-            x='name',
+            x='pool',
             y='apy',
             color='chain',
             tooltip=['name', 'symbol', 'apy']
         ).properties(
-            width=alt.Step(80)  # Ancho fijo para cada barra
+            width=600
         ).interactive()
 
         st.altair_chart(bars, use_container_width=True)
