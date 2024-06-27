@@ -47,7 +47,7 @@ if response.status_code == 200:
     # Sort by descending APY
     df = df.sort_values(by='apy', ascending=False)
 
-    #image_url = "https://pbs.twimg.com/profile_images/1327058875627970561/zk8nf4kv_400x400.jpg"
+    image_url = "https://pbs.twimg.com/profile_images/1327058875627970561/zk8nf4kv_400x400.jpg"
 
     # Contenedor para alinear verticalmente título e imagen
     st.markdown(
