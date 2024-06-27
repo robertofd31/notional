@@ -49,46 +49,47 @@ if response.status_code == 200:
 
     # Mostrar los resultados en la aplicación Streamlit
     st.title('Resultados de la API de Yields para el proyecto "notional-v3"')
-    
-    if not df.empty:
-        st.dataframe(df)
 
-        # Gráfico dinámico según filtros
-        st.subheader('Gráfico Dinámico')
+    # Filtrar por cadena (chain)
+    st.sidebar.header('Filtros')
+    chains = df['chain'].unique()
+    selected_chain = st.sidebar.selectbox('Seleccionar Chain', chains)
+    filtered_df = df[df['chain'] == selected_chain] if selected_chain else df
 
-        # Filtrar por cadena (chain)
-        chains = df['chain'].unique()
-        selected_chain = st.selectbox('Seleccionar Chain', chains)
-        filtered_df = df[df['chain'] == selected_chain] if selected_chain else df
+    # Filtrar por TVL
+    min_tvl, max_tvl = df['tvl'].min(), df['tvl'].max()
+    tvl_range = st.sidebar.slider('Seleccionar TVL (USD)', min_tvl, max_tvl, (min_tvl, max_tvl))
+    filtered_df = filtered_df[(filtered_df['tvl'] >= tvl_range[0]) & (filtered_df['tvl'] <= tvl_range[1])]
 
-        # Filtrar por TVL
-        min_tvl, max_tvl = df['tvl'].min(), df['tvl'].max()
-        tvl_range = st.slider('Seleccionar TVL (USD)', min_tvl, max_tvl, (min_tvl, max_tvl))
-        filtered_df = filtered_df[(filtered_df['tvl'] >= tvl_range[0]) & (filtered_df['tvl'] <= tvl_range[1])]
+    # Filtrar por APY
+    min_apy, max_apy = df['apy'].min(), df['apy'].max()
+    apy_range = st.sidebar.slider('Seleccionar APY', min_apy, max_apy, (min_apy, max_apy))
+    filtered_df = filtered_df[(filtered_df['apy'] >= apy_range[0]) & (filtered_df['apy'] <= apy_range[1])]
 
-        # Filtrar por APY
-        min_apy, max_apy = df['apy'].min(), df['apy'].max()
-        apy_range = st.slider('Seleccionar APY', min_apy, max_apy, (min_apy, max_apy))
-        filtered_df = filtered_df[(filtered_df['apy'] >= apy_range[0]) & (filtered_df['apy'] <= apy_range[1])]
+    # Filtrar por pool_meta
+    pool_meta_options = df['pool_meta'].dropna().unique()
+    selected_pool_meta = st.sidebar.selectbox('Seleccionar Pool Meta', pool_meta_options)
+    filtered_df = filtered_df[filtered_df['pool_meta'] == selected_pool_meta] if selected_pool_meta else filtered_df
 
-        # Filtrar por pool_meta
-        pool_meta_options = df['pool_meta'].dropna().unique()
-        selected_pool_meta = st.selectbox('Seleccionar Pool Meta', pool_meta_options)
-        filtered_df = filtered_df[filtered_df['pool_meta'] == selected_pool_meta] if selected_pool_meta else filtered_df
+    if not filtered_df.empty:
+        # Gráfico de barras según cada fila y APY
+        st.subheader('Gráfico de Barras: APY por Fila')
+        bars = alt.Chart(filtered_df).mark_bar().encode(
+            x='index',
+            y='apy',
+            color='index',
+            tooltip=['name', 'symbol', 'apy']
+        ).properties(
+            width=600
+        ).interactive()
 
-        # Mostrar el gráfico dinámico
-        if not filtered_df.empty:
-            chart = alt.Chart(filtered_df).mark_circle().encode(
-                x='apy',
-                y='tvl',
-                color='chain',
-                tooltip=['name', 'symbol', 'apy', 'tvl']
-            ).interactive()
-            st.altair_chart(chart, use_container_width=True)
-        else:
-            st.write('No hay datos que mostrar con los filtros seleccionados.')
+        st.altair_chart(bars, use_container_width=True)
 
+        # Mostrar los resultados en la tabla
+        st.subheader('Resultados Filtrados')
+        st.dataframe(filtered_df)
     else:
-        st.write("No se encontraron resultados para el proyecto 'notional-v3'.")
+        st.write('No hay datos que mostrar con los filtros seleccionados.')
+
 else:
     st.write("Error al obtener los datos de la API.")
