@@ -47,13 +47,18 @@ if response.status_code == 200:
     # Sort by descending APY
     df = df.sort_values(by='apy', ascending=False)
 
-    # URL de la imagen
-    image_url = "https://pbs.twimg.com/profile_images/1327058875627970561/zk8nf4kv_400x400.jpg"
-    
-    # Título con imagen al lado
-    st.title('Yields of Notional V3')
-    st.markdown(f'<img src="{image_url}" style="float: left; margin-right: 10px; height: 50px; width: 50px;">', unsafe_allow_html=True)
-    
+    #image_url = "https://pbs.twimg.com/profile_images/1327058875627970561/zk8nf4kv_400x400.jpg"
+
+    # Contenedor para alinear verticalmente título e imagen
+    st.markdown(
+        f"""
+        <div style="display: flex; align-items: center;">
+            <img src="{image_url}" style="height: 50px; width: 50px; margin-right: 10px;">
+            <h1 style="margin-bottom: 0;">Yields API Results for project "notional-v3"</h1>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     # Filter by chain
     st.sidebar.header('Filters')
